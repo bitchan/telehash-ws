@@ -1,0 +1,28 @@
+{
+  "name": "telehash-ws",
+  "version": "0.1.0",
+  "description": "Network bindings for telehash to WebSocket",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nekogrid/telehash-ws.git"
+  },
+  "keywords": [
+    "telehash",
+    "transport",
+    "ws",
+    "WebSocket"
+  ],
+  "author": "Kagami Hiiragi",
+  "license": "CC0",
+  "bugs": {
+    "url": "https://github.com/nekogrid/telehash-ws/issues"
+  },
+  "homepage": "https://github.com/nekogrid/telehash-ws",
+  "devDependencies": {
+    "mocha": "*"
+  }
+}
