@@ -4,7 +4,7 @@
   "description": "Network bindings for telehash to WebSocket",
   "main": "index.js",
   "scripts": {
-    "test": "mocha && jshint *.js"
+    "test": "mocha && jshint ."
   },
   "repository": {
     "type": "git",
@@ -23,8 +23,10 @@
   },
   "homepage": "https://github.com/nekogrid/telehash-ws",
   "devDependencies": {
+    "chai": "*",
     "jshint": "*",
-    "mocha": "*"
+    "mocha": "*",
+    "telehash": "^0.3.17"
   },
   "dependencies": {
     "ws": "^0.4.32"
