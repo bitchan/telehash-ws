@@ -29,6 +29,7 @@
     "telehash": "^0.3.17"
   },
   "dependencies": {
+    "lob-enc": "~0.0.12",
     "ws": "^0.4.32"
   }
 }
