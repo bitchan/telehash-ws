@@ -24,20 +24,20 @@ exports.mesh = function(mesh, cbMesh) {
     return [{type: "ws", url: "ws://" + humanhost}];
   };
 
-  log.debug(LOGNAME, "listening on", humanhost);
+  log.info(LOGNAME, "listening on", humanhost);
   var wss = tp.server = new WebSocketServer(args);
 
   wss.on("connection", function(ws) {
     var id = ws._socket.remoteAddress + ":" + ws._socket.remotePort;
     var pipe = new th.Pipe(NAME);
     pipe.id = id;
-    log.debug(LOGNAME, "got connection from", id);
+    log.info(LOGNAME, "got connection from", id);
 
     ws.onmessage = function(e) {
       var packet = lob.decode(e.data);
       if (!packet) {
         var hex = e.data.toString("hex");
-        log.info(LOGNAME, "dropping invalid packet from", id, hex);
+        log.warn(LOGNAME, "dropping invalid packet from", id, hex);
         return;
       }
       mesh.receive(packet, pipe);
@@ -45,11 +45,11 @@ exports.mesh = function(mesh, cbMesh) {
 
     ws.onclose = function(e) {
       ws = null;
-      log.debug(LOGNAME, "disconnected", id, e);
+      log.info(LOGNAME, "disconnected", id, e);
     };
 
     ws.onerror = function(e) {
-      log.debug(LOGNAME, "error from", id, e.message);
+      log.warn(LOGNAME, "error from", id, e.message);
     };
 
     pipe.onSend = function(packet, link, cbSend) {

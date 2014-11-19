@@ -31,16 +31,15 @@ exports.mesh = function(mesh, cbMesh) {
 
     // TODO(Kagami): binaryType blob?
     var ws;
-    log.debug(LOGNAME, "making new connection to", id);
     try {
       ws = new WebSocketClient(id);
     } catch (e) {
-      log.info(LOGNAME, "init error from", id, e.message);
+      log.error(LOGNAME, "init error from", id, e.message);
       return;
     }
 
     ws.onopen = function() {
-      log.debug(LOGNAME, "connected to", id);
+      log.info(LOGNAME, "connected to", id);
       // TODO(Kagami): Keepalive.
       pipe = pipes[id] = new th.Pipe(NAME);
       pipe.id = id;
@@ -50,7 +49,7 @@ exports.mesh = function(mesh, cbMesh) {
         var packet = lob.decode(e.data);
         if (!packet) {
           var hex = e.data.toString("hex");
-          log.info(LOGNAME, "dropping invalid packet from", id, hex);
+          log.error(LOGNAME, "dropping invalid packet from", id, hex);
           return;
         }
         mesh.receive(packet, pipe);
@@ -59,7 +58,7 @@ exports.mesh = function(mesh, cbMesh) {
       ws.onclose = function(e) {
         delete pipes[id];
         ws = null;
-        log.debug(LOGNAME, "disconnected from", id, e);
+        log.info(LOGNAME, "disconnected from", id, e);
       };
 
       pipe.onSend = function(packet, link, cbSend) {
@@ -77,7 +76,7 @@ exports.mesh = function(mesh, cbMesh) {
     };
 
     ws.onerror = function(e) {
-      log.info(LOGNAME, "error from", id, e);
+      log.error(LOGNAME, "error from", id, e);
     };
   };
 
