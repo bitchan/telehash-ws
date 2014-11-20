@@ -2,6 +2,47 @@
 
 Network bindings for [telehash](http://telehash.org/) to WebSocket for both client (browserify and node) and server (node).
 
+## Usage
+
+```js
+var th = require("telehash");
+th.add(require("telehash-ws"));
+
+var idA, idB;
+var meshA, meshB;
+var linkAB, linkBA;
+
+function initEndpoints() {
+  th.generate(function(err, id) {
+    idA = id;
+    th.generate(function(err, id) {
+      idB = id;
+      initMesh();
+    });
+  });
+}
+
+function initMesh() {
+  th.mesh({id: idA}, function(err, mesh) {
+    meshA = mesh;
+    th.mesh({id: idB, ws: {host: "127.0.0.1", port: 12345}}, function(err, mesh) {
+      meshB = mesh;
+      link();
+    });
+  });
+}
+
+function link() {
+  linkAB = meshA.link({keys: idB.keys, paths: [{type: "ws", url: "ws://127.0.0.1:12345"}]});
+  linkAB.status(function(err) {
+    console.log("CONNECTED");
+  });
+  linkBA = meshB.link(idA.hashname);
+}
+
+initEndpoints();
+```
+
 ## License
 
 telehash-ws - Network bindings for telehash to WebSocket
