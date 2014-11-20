@@ -33,7 +33,8 @@ function initMesh() {
 }
 
 function link() {
-  linkAB = meshA.link({keys: idB.keys, paths: [{type: "ws", url: "ws://127.0.0.1:12345"}]});
+  var wspath = {type: "ws", url: "ws://127.0.0.1:12345"};
+  linkAB = meshA.link({keys: idB.keys, paths: [wspath]});
   linkAB.status(function(err) {
     console.log("CONNECTED");
   });
