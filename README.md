@@ -48,7 +48,7 @@ initEndpoints();
 
 telehash-ws - Network bindings for telehash to WebSocket
 
-Written in 2014 by Kagami Hiiragi <kagami@genshiken.org>
+Written in 2014-2015 by Kagami Hiiragi <kagami@genshiken.org>
 
 To the extent possible under law, the author(s) have dedicated all copyright and related and neighboring rights to this software to the public domain worldwide. This software is distributed without any warranty.
 
