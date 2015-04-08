@@ -65,7 +65,7 @@ describe("telehash-ws", function() {
     meshB.stream(function(link, args, cbAccept) {
       var streamBA = cbAccept();
       streamBA.on("data", function(chunk) {
-        expect(chunk).to.equal("testAB");
+        expect(chunk.toString()).to.equal("testAB");
         streamBA.write("testBA");
       });
     });
@@ -73,7 +73,7 @@ describe("telehash-ws", function() {
     var streamAB = linkAB.stream();
     streamAB.write("testAB");
     streamAB.on("data", function(chunk) {
-      expect(chunk).to.equal("testBA");
+      expect(chunk.toString()).to.equal("testBA");
       done();
     });
   });

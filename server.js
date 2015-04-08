@@ -6,21 +6,17 @@ var WebSocketServer = require("ws").Server;
 var lob = require("lob-enc");
 
 exports.mesh = function(mesh, cbMesh) {
-  if (!require("./util").isNode) {
-    throw new Error("Browserify not supported");
-  }
-
   var log = mesh.log;
   var th = mesh.lib;
   var tp = {};
   var args = mesh.args.ws || {};
-  if (!args.port && !args.server) {
-    args.port = 0;
+  if (!args.port) {
+    args.port = Math.floor(Math.random() * 64511) + 1024;
   }
-  var humanhost = (args.host || "0.0.0.0") + ":" + args.port;
+  var humanhost = (args.host || "127.0.0.1") + ":" + args.port;
 
   tp.paths = function() {
-    // TODO(Kagami);
+    // TODO(Kagami): See `tp.paths` in telehash-http.
     return [{type: "ws", url: "ws://" + humanhost}];
   };
 

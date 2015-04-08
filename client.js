@@ -3,15 +3,13 @@
 var NAME = exports.name = "ws-client";
 var LOGNAME = "[" + NAME + "]";
 var lob = require("lob-enc");
-var isNode = require("./util").isNode;
+var isNode = typeof window === "undefined";
 
 exports.mesh = function(mesh, cbMesh) {
   var WebSocketClient;
   if (isNode) {
     WebSocketClient = require("ws");
   } else {
-    // TODO(Kagami): Export some function to check WebSocket
-    // availability instead of failing?
     if (typeof WebSocket === "undefined") {
       throw new Error("WebSocket not available");
     }
