@@ -44,7 +44,7 @@ exports.mesh = function(mesh, cbMesh) {
       pipe.path = path;
 
       ws.onmessage = function(e) {
-        var packet = lob.decode(e.data);
+        var packet = lob.decode(new Buffer(e.data,'binary'));
         if (!packet) {
           var hex = e.data.toString("hex");
           log.error(LOGNAME, "dropping invalid packet from", id, hex);
@@ -63,9 +63,9 @@ exports.mesh = function(mesh, cbMesh) {
         if (!ws) return;  // Disconnected
         var buf = lob.encode(packet);
         if (isNode) {
-          ws.send(buf, cbSend);
+          ws.send(buf.toString('binary'), cbSend);
         } else {
-          ws.send(buf);
+          ws.send(buf.toString('binary'));
           cbSend();
         }
       };

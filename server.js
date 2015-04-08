@@ -30,7 +30,7 @@ exports.mesh = function(mesh, cbMesh) {
     log.info(LOGNAME, "got connection from", id);
 
     ws.onmessage = function(e) {
-      var packet = lob.decode(e.data);
+      var packet = lob.decode(new Buffer(e.data,'binary'));
       if (!packet) {
         var hex = e.data.toString("hex");
         log.warn(LOGNAME, "dropping invalid packet from", id, hex);
@@ -51,7 +51,7 @@ exports.mesh = function(mesh, cbMesh) {
     pipe.onSend = function(packet, link, cbSend) {
       if (!ws) return;  // Disconnected
       var buf = lob.encode(packet);
-      ws.send(buf, cbSend);
+      ws.send(buf.toString('binary'), cbSend);
     };
   });
 
