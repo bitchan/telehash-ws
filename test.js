@@ -45,6 +45,8 @@ function initMesh(done) {
 }
 
 describe("telehash-ws", function() {
+  var streamAB, streamBA;
+
   before(function(done) {
     initEndpoints(function(err) {
       expect(err).to.not.exist;
@@ -63,18 +65,28 @@ describe("telehash-ws", function() {
 
   it("should allow to communicate b/w ws-client and ws-server", function(done) {
     meshB.stream(function(link, args, cbAccept) {
-      var streamBA = cbAccept();
-      streamBA.on("data", function(chunk) {
+      streamBA = cbAccept();
+      streamBA.once("data", function(chunk) {
         expect(chunk.toString()).to.equal("testAB");
         streamBA.write("testBA");
       });
     });
 
-    var streamAB = linkAB.stream();
+    streamAB = linkAB.stream();
     streamAB.write("testAB");
-    streamAB.on("data", function(chunk) {
+    streamAB.once("data", function(chunk) {
       expect(chunk.toString()).to.equal("testBA");
       done();
     });
+  });
+
+  it("should allow to send and receive binary data", function(done) {
+    streamBA.once("data", function(chunk) {
+      expect(Buffer.isBuffer(chunk)).to.be.true;
+      expect(chunk.toString("hex")).to.equal("01020304");
+      done();
+    });
+
+    streamAB.write(Buffer("01020304", "hex"));
   });
 });
