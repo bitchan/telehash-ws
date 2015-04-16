@@ -27,13 +27,33 @@ exports.mesh = function(mesh, cbMesh) {
     var pipe = pipes[id];
     if (pipe) return cbPipe(pipe);
 
-    // TODO(Kagami): binaryType blob?
     var ws;
     try {
       ws = new WebSocketClient(id);
     } catch (e) {
       log.error(LOGNAME, "init error from", id, e.message);
       return;
+    }
+
+    // Compatibility shims for browser and node WebSocket
+    // implementations.
+    var getmsgbuf, sendmsg;
+    if (isNode) {
+      getmsgbuf = function(data) {
+        return data;
+      };
+      sendmsg = function(data, cb) {
+        ws.send(data, {binary: true}, cb);
+      };
+    } else {
+      ws.binaryType = "arraybuffer";
+      getmsgbuf = function(data) {
+        return new Buffer(new Uint8Array(data));
+      };
+      sendmsg = function(data, cb) {
+        ws.send(data);
+        cb();
+      };
     }
 
     ws.onopen = function() {
@@ -44,7 +64,7 @@ exports.mesh = function(mesh, cbMesh) {
       pipe.path = path;
 
       ws.onmessage = function(e) {
-        var packet = lob.decode(e.data);
+        var packet = lob.decode(getmsgbuf(e.data));
         if (!packet) {
           var hex = e.data.toString("hex");
           log.error(LOGNAME, "dropping invalid packet from", id, hex);
@@ -62,12 +82,7 @@ exports.mesh = function(mesh, cbMesh) {
       pipe.onSend = function(packet, link, cbSend) {
         if (!ws) return;  // Disconnected
         var buf = lob.encode(packet);
-        if (isNode) {
-          ws.send(buf, cbSend);
-        } else {
-          ws.send(buf);
-          cbSend();
-        }
+        sendmsg(buf, cbSend);
       };
 
       cbPipe(pipe);
