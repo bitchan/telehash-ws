@@ -8,7 +8,10 @@
     "./server.js": false
   },
   "scripts": {
-    "test": "mocha && jshint ."
+    "test": "mocha && xvfb-run -a karma start && jshint .",
+    "m": "mocha",
+    "k": "xvfb-run -a karma start",
+    "j": "jshint ."
   },
   "repository": {
     "type": "git",
@@ -29,8 +32,15 @@
   "devDependencies": {
     "chai": "*",
     "jshint": "*",
+    "karma": "^0.12.31",
+    "karma-browserify": "^4.1.2",
+    "karma-chrome-launcher": "^0.1.8",
+    "karma-cli": "~0.0.4",
+    "karma-firefox-launcher": "^0.1.4",
+    "karma-mocha": "^0.1.10",
+    "karma-mocha-reporter": "^1.0.2",
     "mocha": "*",
-    "telehash": "^0.3.17"
+    "telehash": "^0.3.26"
   },
   "dependencies": {
     "lob-enc": "~0.0.12",
