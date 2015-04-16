@@ -1,6 +1,6 @@
 {
   "name": "telehash-ws",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Network bindings for telehash to WebSocket",
   "main": "index.js",
   "browser": {
